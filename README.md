@@ -1,21 +1,14 @@
 ﻿# Help Campus
 
-O **Help Campus** é uma proposta de plataforma para facilitar a comunicação e o apoio dentro da comunidade universitária, conectando estudantes a informações e recursos úteis para o dia a dia no campus.
+O **Help Campus** é uma proposta de plataforma que facilita e centraliza a comunicação de problemas de infraestrutura, equipamentos e serviços entre os estudantes, professores e a gestão da Universidade de Fortaleza (UNIFOR), permitindo o registro, a categorização e o acompanhamento do status de resolução das ocorrências no campus.  
 
-Este README é um exemplo inicial de apresentação do projeto e pode ser atualizado conforme o desenvolvimento avançar.
+## Introduction
 
-## Objetivo
+The platform will allow students to report issues involving equipment such as air conditioners and chairs, as well as problems related to lawns, animals on campus, and other facilities.
 
-Reunir, em um só lugar, informações e canais de ajuda para tornar a experiência universitária mais simples, organizada e colaborativa.
+Reports may include photos, location, and a description of the problem to help with its resolution. Users will also be able to track the status of each report through visual symbols displayed on their profile screen.
 
-## Funcionalidades propostas
-
-- Consulta de informações sobre serviços e espaços do campus.
-- Publicação de dúvidas e troca de conhecimentos entre estudantes.
-- Divulgação de avisos e eventos acadêmicos.
-- Acesso a contatos e orientações de apoio ao aluno.
-
-As funcionalidades acima são sugestões para o projeto e ainda não representam recursos implementados.
+In this way, the project aims to make communication with university management faster, more organized, and more efficient.
 
 ## Estado do projeto
 
