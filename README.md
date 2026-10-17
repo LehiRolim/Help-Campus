@@ -30,5 +30,5 @@ In this way, the project aims to make communication with university management f
 
 ## expected result
 
-![Low-fidelity wireframe](imagens/Low-fidelity wireframe.jpeg)
+![Low-fidelity wireframe](images/Low-fidelity%20wireframe.jpeg)
 
