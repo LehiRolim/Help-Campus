@@ -1,6 +1,6 @@
 ﻿# Help Campus
 
-O **Help Campus** é uma proposta de plataforma que facilita e centraliza a comunicação de problemas de infraestrutura, equipamentos e serviços entre os estudantes, professores e a gestão da Universidade de Fortaleza (UNIFOR), permitindo o registro, a categorização e o acompanhamento do status de resolução das ocorrências no campus.  
+**Help Campus** is a proposed platform that facilitates and centralizes the reporting of issues related to infrastructure, equipment, and services among students, professores, and the administration of the University of Fortaleza (UNIFOR), enabling the logging, categorization, and status tracking of the resolution of incidents on campus.
 
 ## Introduction
 
