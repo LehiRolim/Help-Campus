@@ -156,9 +156,17 @@ export default function TelaOcorrencias() {
           }
           renderItem={({ item }) => (
             <View style={styles.cartaoOcorrencia}>
-              <Text style={styles.tituloCartaoOcorrencia}>
-                {categorias.find((categoria) => categoria.value === item.categoria)?.label ?? item.categoria}
-              </Text>
+              <View style={styles.cabecalhoCartaoOcorrencia}>
+                <Ionicons
+                  name="checkmark"
+                  size={22}
+                  color={item.status === 'fechada' ? '#15803d' : '#6b7280'}
+                  accessible={false}
+                />
+                <Text style={styles.tituloCartaoOcorrencia}>
+                  {categorias.find((categoria) => categoria.value === item.categoria)?.label ?? item.categoria}
+                </Text>
+              </View>
               <Text style={styles.textoCartaoOcorrencia}>{item.descricao}</Text>
               <Text style={styles.textoCartaoOcorrencia}>Local: {item.local}</Text>
               <Text style={styles.textoCartaoOcorrencia}>

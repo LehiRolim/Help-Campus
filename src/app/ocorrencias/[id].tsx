@@ -5,7 +5,7 @@ import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { categorias } from '@/constants/categorias';
-import { nomesStatus } from '@/constants/status-ocorrencias';
+import { StatusOcorrencia } from '@/components/status-ocorrencia';
 import { acompanharOcorrencia, garantirUsuario, type Ocorrencia } from '@/services/ocorrencias';
 import { styles } from '@/styles/ocorrencias';
 
@@ -116,7 +116,10 @@ function ConteudoDetalhes({ id }: { id: string | undefined }) {
             categorias.find((item) => item.value === ocorrencia.categoria)?.label ?? ocorrencia.categoria
           } />
           <Informacao titulo="Prioridade" valor={prioridades[ocorrencia.prioridade] ?? ocorrencia.prioridade} />
-          <Informacao titulo="Status" valor={nomesStatus[ocorrencia.status] ?? ocorrencia.status} />
+          <View style={styles.campoDetalhe}>
+            <Text style={styles.rotuloDetalhe}>Status</Text>
+            <StatusOcorrencia status={ocorrencia.status} estiloTexto={styles.valorDetalhe} />
+          </View>
           <Informacao titulo="Data de criação" valor={
             ocorrencia.criadaEm
               ? ocorrencia.criadaEm.toDate().toLocaleString('pt-BR')
