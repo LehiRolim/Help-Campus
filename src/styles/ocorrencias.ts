@@ -166,5 +166,15 @@ export const styles = StyleSheet.create({
   },
   botaoLimparFiltro: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 8 },
   textoLimparFiltro: { color: '#0147f6', fontWeight: '600' },
+  painelSugestao: { gap: 10, marginTop: 12 },
+  avisoSugestao: { fontSize: 13, color: '#60646c', lineHeight: 19 },
+  botaoSugestao: {
+    minHeight: 48, padding: 12, borderRadius: 8, borderWidth: 1,
+    borderColor: '#0147f6', flexDirection: 'row', gap: 8,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  botaoSugestaoDesabilitado: { opacity: 0.5 },
+  textoBotaoSugestao: { color: '#0147f6', fontWeight: '600', flexShrink: 1 },
+  erroSugestao: { color: '#b91c1c', fontSize: 14 },
 
 });

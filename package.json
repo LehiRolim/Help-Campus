@@ -43,7 +43,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "ia:dev": "node --env-file=.env.gemini.local server/iniciar.mjs",
+    "ia:start": "node server/iniciar.mjs",
+    "ia:test": "node --test server/ia.test.mjs"
   },
   "private": true
 }

@@ -6,6 +6,7 @@ import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CampoCategoria } from '@/components/campo-categoria';
+import { SugestaoCategoria } from '@/components/sugestao-categoria';
 import { categorias, tamanhoMaximoDescricao } from '@/constants/categorias';
 import { styles } from '@/styles/ocorrencias';
 import { salvarOcorrencia } from '@/services/ocorrencias';
@@ -14,6 +15,7 @@ export default function NovaOcorrencia() {
 
   const [prioridade, setPrioridade] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [versaoDescricao, setVersaoDescricao] = useState(0);
   const [categoria, setCategoria] = useState('');
   const [local, setLocal] = useState('');
   const [salvando, setSalvando] = useState(false);
@@ -96,7 +98,10 @@ export default function NovaOcorrencia() {
             style={styles.input}
             value={descricao}
             editable={!salvando}
-            onChangeText={setDescricao}
+            onChangeText={(texto) => {
+              setDescricao(texto);
+              setVersaoDescricao((versao) => versao + 1);
+            }}
             maxLength={tamanhoMaximoDescricao}
             placeholder="Descreva o problema"
             placeholderTextColor="#60646c"
@@ -121,6 +126,7 @@ export default function NovaOcorrencia() {
         </View>
 
         <CampoCategoria value={categoria} onChange={setCategoria} />
+        <SugestaoCategoria key={`${versaoDescricao}-${salvando}`} descricao={descricao} desabilitado={salvando} onAceitar={setCategoria} />
 
         <View style={styles.campoDescricao}>
           <Text style={styles.texto_input} >Prioridade</Text>

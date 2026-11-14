@@ -1,0 +1,21 @@
+# Blueprint opcional. Também é possível criar o serviço manualmente com server/README.md.
+services:
+  - type: web
+    name: help-campus-ia
+    runtime: node
+    plan: free
+    buildCommand: node --check server/iniciar.mjs && node --check server/ia.mjs
+    startCommand: node server/iniciar.mjs
+    healthCheckPath: /health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_VERSION
+        value: 22.21.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FIREBASE_WEB_API_KEY
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        value: help-campus-b6d64
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite

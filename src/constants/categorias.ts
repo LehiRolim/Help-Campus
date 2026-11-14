@@ -1,14 +1,11 @@
-export const categorias = [
-  { value: 'iluminacao', label: 'Iluminação' },
-  { value: 'hidraulica', label: 'Hidráulica' },
-  { value: 'limpeza', label: 'Limpeza' },
-  { value: 'infraestrutura', label: 'Infraestrutura' },
-  { value: 'tecnologia', label: 'Tecnologia' },
-  { value: 'seguranca', label: 'Segurança' },
-  { value: 'outros', label: 'Outros' },
-] as const;
+import rotulos from './categorias-labels.json';
 
-export type Categoria = (typeof categorias)[number]['value'];
+export type Categoria = keyof typeof rotulos;
+
+export const categorias = (Object.keys(rotulos) as Categoria[]).map((value) => ({
+  value,
+  label: rotulos[value],
+}));
 
 export const tamanhoMaximoDescricao = 2000;
 
