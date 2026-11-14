@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "help-campus",
+    "slug": "help-campus",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "helpcampus",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/expo.icon"
+    },
+    "web": {
+      "output": "server"
+    },
+    "plugins": [
+      "expo-router",
+      ["expo-splash-screen", { "backgroundColor": "#ffffff" }]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
