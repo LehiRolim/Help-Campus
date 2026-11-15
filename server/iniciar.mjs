@@ -17,8 +17,11 @@ const servidor = criarServidor({
   geminiKey, firebaseKey,
   projectId: process.env.FIREBASE_PROJECT_ID || 'help-campus-b6d64',
   model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME?.trim(),
+  cloudApiKey: process.env.CLOUDINARY_API_KEY?.trim(),
+  cloudApiSecret: process.env.CLOUDINARY_API_SECRET?.trim(),
 });
-servidor.requestTimeout = 15_000;
+servidor.requestTimeout = 60_000;
 servidor.headersTimeout = 10_000;
 servidor.on('error', (erro) => {
   console.error(`Não foi possível iniciar o servidor (${erro.code}). Verifique se a porta ${port} está livre.`);

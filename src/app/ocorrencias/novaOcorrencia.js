@@ -1,3 +1,4 @@
+import { criarIdOcorrencia } from '@/services/ocorrencias';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { router } from 'expo-router';
@@ -6,6 +7,7 @@ import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CampoCategoria } from '@/components/campo-categoria';
+import { CampoFoto } from '@/components/campo-foto';
 import { SugestaoCategoria } from '@/components/sugestao-categoria';
 import { categorias, tamanhoMaximoDescricao } from '@/constants/categorias';
 import { styles } from '@/styles/ocorrencias';
@@ -22,10 +24,13 @@ export default function NovaOcorrencia() {
   const [local, setLocal] = useState('');
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState('');
+  const [foto, setFoto] = useState(/** @type {import('@/services/fotos').FotoLocal | null} */ (null));
+  const [preparandoFoto, setPreparandoFoto] = useState(false);
+  const idOcorrencia = useRef('');
   const envioEmAndamento = useRef(false);
 
   async function enviarOcorrencia() {
-    if (envioEmAndamento.current) return;
+    if (envioEmAndamento.current || preparandoFoto) return;
 
     setErro('');
 
@@ -49,6 +54,7 @@ export default function NovaOcorrencia() {
 
     envioEmAndamento.current = true;
     setSalvando(true);
+    if (!idOcorrencia.current) idOcorrencia.current = criarIdOcorrencia();
 
     try {
       await salvarOcorrencia({
@@ -56,14 +62,12 @@ export default function NovaOcorrencia() {
         local,
         categoria: categoriaSelecionada.value,
         prioridade,
-      });
+      }, { id: idOcorrencia.current, foto });
 
       router.replace('/');
     } catch (falha) {
       console.error('Erro ao salvar ocorrência:', falha);
-      setErro(
-        'Não foi possível salvar. Verifique sua conexão e tente novamente.',
-      );
+      setErro(falha instanceof Error ? falha.message : 'Não foi possível salvar. Verifique sua conexão e tente novamente.');
     } finally {
       envioEmAndamento.current = false;
       setSalvando(false);
@@ -75,7 +79,7 @@ export default function NovaOcorrencia() {
       <View style={styles.cabecalhoNova}>
         <TouchableOpacity
           style={styles.botaoVoltar}
-          disabled={salvando}
+          disabled={salvando || preparandoFoto}
           onPress={() => {
             if (router.canGoBack()) {
               router.back();
@@ -111,6 +115,8 @@ export default function NovaOcorrencia() {
             multiline
           />
         </View>
+
+        <CampoFoto value={foto} disabled={salvando} onChange={setFoto} onPreparandoChange={setPreparandoFoto} />
 
         <View style={styles.campoDescricao}>
           <Text style={[styles.texto_input, modoEscuro && { color: '#f1f1f1' }]}>Local</Text>
@@ -165,9 +171,9 @@ export default function NovaOcorrencia() {
 
         <TouchableOpacity
           onPress={enviarOcorrencia}
-          disabled={salvando}
+          disabled={salvando || preparandoFoto}
           accessibilityRole="button"
-          accessibilityState={{ disabled: salvando, busy: salvando }}
+          accessibilityState={{ disabled: salvando || preparandoFoto, busy: salvando }}
           style={{
             backgroundColor: '#0147f6',
             padding: 16,
@@ -175,11 +181,11 @@ export default function NovaOcorrencia() {
             marginTop: 24,
             marginBottom: 32,
             alignItems: 'center',
-            opacity: salvando ? 0.6 : 1,
+            opacity: salvando || preparandoFoto ? 0.6 : 1,
           }}
         >
           <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>
-            {salvando ? 'Salvando...' : 'Salvar ocorrência'}
+            {salvando ? (foto ? 'Enviando foto e salvando...' : 'Salvando...') : 'Salvar ocorrência'}
           </Text>
         </TouchableOpacity>
       </ScrollView>

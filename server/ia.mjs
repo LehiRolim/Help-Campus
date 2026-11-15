@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
+import { criarFotos, ErroFoto } from './fotos.mjs';
 
 const categorias = JSON.parse(readFileSync(new URL('../src/constants/categorias-labels.json', import.meta.url), 'utf8'));
 const permitidas = Object.keys(categorias);
@@ -11,7 +12,8 @@ class Falha extends Error {
   }
 }
 
-export function criarServidor({ geminiKey, firebaseKey, projectId, model, fetchImpl = fetch }) {
+export function criarServidor({ geminiKey, firebaseKey, projectId, model, cloudName, cloudApiKey, cloudApiSecret, fetchImpl = fetch }) {
+  const fotos = criarFotos({ cloudName, apiKey: cloudApiKey, apiSecret: cloudApiSecret, projectId, categorias, fetchImpl });
   const limites = new Map();
   let dia = '';
   let totalDia = 0;
@@ -44,7 +46,8 @@ export function criarServidor({ geminiKey, firebaseKey, projectId, model, fetchI
         responder(200, { servico: 'Help Campus — sugestões de categoria', health: '/health' });
         return;
       }
-      if (req.url !== '/sugerir-categoria') throw new Falha(404, 'Rota não encontrada.');
+      const rotaFoto = ['/ocorrencias/com-foto', '/fotos/visualizar'].includes(req.url);
+      if (req.url !== '/sugerir-categoria' && !rotaFoto) throw new Falha(404, 'Rota não encontrada.');
       if (req.method !== 'POST') throw new Falha(405, 'Use POST.');
       // Esta API atende ao aplicativo nativo; CORS para Web não está habilitado.
       if (req.headers.origin) throw new Falha(403, 'Este servidor atende apenas ao aplicativo nativo.');
@@ -60,13 +63,13 @@ export function criarServidor({ geminiKey, firebaseKey, projectId, model, fetchI
       let bytes = 0;
       for await (const parte of req) {
         bytes += parte.length;
-        if (bytes > 12_000) throw new Falha(413, 'Descrição muito grande.');
+        if (bytes > (req.url === '/ocorrencias/com-foto' ? 2_810_000 : 12_000)) throw new Falha(413, 'Arquivo ou descrição muito grande.');
         partesCorpo.push(parte);
       }
       let corpo;
       try { corpo = JSON.parse(Buffer.concat(partesCorpo).toString('utf8')); } catch { throw new Falha(400, 'JSON inválido.'); }
       const descricao = typeof corpo?.descricao === 'string' ? corpo.descricao.trim() : '';
-      if (descricao.length < 10 || descricao.length > 2000) {
+      if (!rotaFoto && (descricao.length < 10 || descricao.length > 2000)) {
         throw new Falha(400, 'Digite uma descrição entre 10 e 2.000 caracteres.');
       }
 
@@ -86,6 +89,10 @@ export function criarServidor({ geminiKey, firebaseKey, projectId, model, fetchI
         throw new Falha(401, 'Sessão inválida.');
       }
       limitar(`usuario:${conta.localId}`, 6);
+      if (rotaFoto) {
+        responder(200, await fotos({ rota: req.url, corpo, usuarioId: conta.localId, token }));
+        return;
+      }
       const hoje = new Date().toISOString().slice(0, 10);
       if (dia !== hoje) { dia = hoje; totalDia = 0; }
       if (totalDia >= 100) throw new Falha(429, 'Limite diário do servidor atingido. Escolha a categoria manualmente.');
@@ -122,8 +129,9 @@ export function criarServidor({ geminiKey, firebaseKey, projectId, model, fetchI
       responder(200, { categoria: sugestao.categoria });
     } catch (erro) {
       const timeout = erro.name === 'TimeoutError';
-      responder(erro instanceof Falha ? erro.status : timeout ? 504 : 503, {
-        erro: erro instanceof Falha ? erro.message : timeout ? 'A IA demorou para responder. Tente novamente.' : 'Serviço indisponível. Escolha a categoria manualmente.',
+      const conhecida = erro instanceof Falha || erro instanceof ErroFoto;
+      responder(conhecida ? erro.status : timeout ? 504 : 503, {
+        erro: conhecida ? erro.message : timeout ? 'O servidor demorou para responder. Tente novamente.' : 'Serviço indisponível. Tente novamente mais tarde.',
       });
     }
   });

@@ -21,7 +21,7 @@ export default function TelaPerfil() {
   const { modoEscuro, alternarModoEscuro } = useTheme();
 
   const [nome, setNome] = useState('Mário Junior');
-  const [usuarioEmail, setUsuarioEmail] = useState('');
+  const [usuarioEmail, setUsuarioEmail] = useState(() => auth.currentUser?.email || 'mario@aluno.unifor.br');
   const [curso, setCurso] = useState('Análise e Desenvolvimento de Sistemas');
   const [matricula, setMatricula] = useState('2310948');
 
@@ -30,15 +30,6 @@ export default function TelaPerfil() {
   const [editEmail, setEditEmail] = useState('');
   const [editCurso, setEditCurso] = useState('');
   const [editMatricula, setEditMatricula] = useState('');
-
-  useEffect(() => {
-    const usuario = auth.currentUser;
-    if (usuario && usuario.email) {
-      setUsuarioEmail(usuario.email);
-    } else {
-      setUsuarioEmail('mario@aluno.unifor.br');
-    }
-  }, []);
 
   const abrirModalEdicao = () => {
     setEditNome(nome);
@@ -53,7 +44,7 @@ export default function TelaPerfil() {
       Alert.alert('Campo Obrigatório', 'Por favor, insira o seu nome.');
       return;
     }
-    
+
     const matriculaLimpa = editMatricula.trim();
     if (!/^\d{7}$/.test(matriculaLimpa)) {
       Alert.alert('Matrícula Inválida', 'A matrícula deve conter exatamente 7 dígitos numéricos.');
@@ -70,6 +61,10 @@ export default function TelaPerfil() {
   };
 
   const deslogar = () => {
+    if (auth.currentUser?.isAnonymous) {
+      Alert.alert('Conta de visitante', 'O login com conta ainda não está integrado. Vamos manter sua sessão de visitante para preservar o acesso às suas ocorrências.');
+      return;
+    }
     signOut(auth)
       .then(() => {
         Alert.alert('Sessão Encerrada', 'Você saiu da sua conta.');
@@ -100,9 +95,9 @@ export default function TelaPerfil() {
       </TouchableOpacity>
 
       <View style={[styles.headerCard, temaAtual.card]}>
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60' }} 
-          style={styles.avatar} 
+        <Image
+          source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60' }}
+          style={styles.avatar}
         />
         <Text style={[styles.nome, temaAtual.texto]}>{nome}</Text>
         <Text style={[styles.email, temaAtual.textoSecundario]}>{usuarioEmail}</Text>
@@ -147,19 +142,19 @@ export default function TelaPerfil() {
             <Text style={[styles.modalTitulo, temaAtual.texto]}>Editar Perfil</Text>
 
             <Text style={styles.label}>Nome Completo</Text>
-            <TextInput 
-              style={[styles.input, temaAtual.input]} 
-              value={editNome} 
-              onChangeText={setEditNome} 
+            <TextInput
+              style={[styles.input, temaAtual.input]}
+              value={editNome}
+              onChangeText={setEditNome}
               placeholder="Nome"
               placeholderTextColor="#888"
             />
 
             <Text style={styles.label}>E-mail</Text>
-            <TextInput 
-              style={[styles.input, temaAtual.input]} 
-              value={editEmail} 
-              onChangeText={setEditEmail} 
+            <TextInput
+              style={[styles.input, temaAtual.input]}
+              value={editEmail}
+              onChangeText={setEditEmail}
               keyboardType="email-address"
               autoCapitalize="none"
               placeholder="E-mail"
@@ -167,19 +162,19 @@ export default function TelaPerfil() {
             />
 
             <Text style={styles.label}>Curso</Text>
-            <TextInput 
-              style={[styles.input, temaAtual.input]} 
-              value={editCurso} 
-              onChangeText={setEditCurso} 
+            <TextInput
+              style={[styles.input, temaAtual.input]}
+              value={editCurso}
+              onChangeText={setEditCurso}
               placeholder="Curso"
               placeholderTextColor="#888"
             />
 
             <Text style={styles.label}>Matrícula (7 dígitos)</Text>
-            <TextInput 
-              style={[styles.input, temaAtual.input]} 
-              value={editMatricula} 
-              onChangeText={setEditMatricula} 
+            <TextInput
+              style={[styles.input, temaAtual.input]}
+              value={editMatricula}
+              onChangeText={setEditMatricula}
               keyboardType="numeric"
               maxLength={7}
               placeholder="Ex: 1234567"
@@ -282,24 +277,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)', 
     justifyContent: 'center', 
     alignItems: 'center',
-    padding: 20 
+    padding: 20
   },
-  modalCard: { 
-    width: '100%', 
-    maxWidth: 400, 
-    borderRadius: 12, 
-    padding: 20, 
+  modalCard: {
+    width: '100%',
+    maxWidth: 400,
+    borderRadius: 12,
+    padding: 20,
     borderWidth: 1,
-    elevation: 5 
+    elevation: 5
   },
   modalTitulo: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, textAlign: 'center' },
   label: { fontSize: 12, color: '#888', marginBottom: 4, fontWeight: '600' },
-  input: { 
-    padding: 12, 
-    borderRadius: 8, 
-    borderWidth: 1, 
-    marginBottom: 12, 
-    fontSize: 14 
+  input: {
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 12,
+    fontSize: 14
   },
   modalBotoes: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 },
   modalBotao: { paddingVertical: 10, paddingHorizontal: 18, borderRadius: 6, marginLeft: 10 },

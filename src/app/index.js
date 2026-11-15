@@ -51,11 +51,19 @@ export default function TelaOcorrencias() {
     <SafeAreaView style={[styles.container, temaAtual.container]}>
       {/* Cabeçalho */}
       <View style={styles.header}>
-        <Text style={[styles.titulo, temaAtual.textoTitulo]}>Ocorrências</Text>
-        <View style={styles.headerAcoes}>
-          <TouchableOpacity onPress={() => router.push('/perfil')} style={styles.iconePerfil}>
-            <Ionicons name="person-circle" size={32} color={modoEscuro ? '#4b83f6' : '#0147f6'} />
-          </TouchableOpacity>
+        <Text style={styles.title}>Ocorrências</Text>
+
+        <View style={styles.Icon}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Filtrar ocorrências por status. Filtro atual: ${nomeFiltro}`}
+            accessibilityState={{ expanded: filtrosAbertos }}
+            onPress={() => setFiltrosAbertos((valor) => !valor)}
+            style={[styles.botaoFiltro, filtroStatus !== 'todas' && styles.botaoFiltroAtivo]}
+          >
+            <Ionicons name={filtroStatus === 'todas' ? 'funnel-outline' : 'funnel'} size={25} color="#0147f6" />
+          </Pressable>
+          <Ionicons name="person-circle" size={29} color="#0147f6" />
         </View>
       </View>
 

@@ -176,5 +176,8 @@ export const styles = StyleSheet.create({
   botaoSugestaoDesabilitado: { opacity: 0.5 },
   textoBotaoSugestao: { color: '#0147f6', fontWeight: '600', flexShrink: 1 },
   erroSugestao: { color: '#b91c1c', fontSize: 14 },
+  fotoOcorrencia: { width: '100%', height: 240, borderRadius: 8, backgroundColor: '#f3f4f6' },
+  acoesFoto: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  botaoFoto: { flexGrow: 1 },
 
 });

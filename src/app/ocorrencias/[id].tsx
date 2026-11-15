@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { categorias } from '@/constants/categorias';
 import { StatusOcorrencia } from '@/components/status-ocorrencia';
+import { FotoOcorrencia } from '@/components/foto-ocorrencia';
 import { acompanharOcorrencia, garantirUsuario, type Ocorrencia } from '@/services/ocorrencias';
 import { styles } from '@/styles/ocorrencias';
 import { useTheme } from '@/context/ThemeContext';
