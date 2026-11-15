@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
@@ -12,7 +13,7 @@ import {
   TextInput 
 } from 'react-native';
 import { signOut } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { auth } from '../../firebaseConfig';
 
 export default function TelaPerfil({ navigation }) {
 
@@ -133,7 +134,7 @@ export default function TelaPerfil({ navigation }) {
         <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => navigation.navigate('TermosPrivacidade')}>
           <Text style={[styles.menuText, temaAtual.texto]}>📄 Termos de Uso e Política de Privacidade</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => navigation.navigate('EsqueceuSenha')}>
+        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => navigation.navigate('RecuperarSenha')}>
           <Text style={[styles.menuText, temaAtual.texto]}>🔑 Redefinir Senha</Text>
         </TouchableOpacity>
       </View>
@@ -306,4 +307,4 @@ const styles = StyleSheet.create({
   botaoCancelarTexto: { color: '#fff', fontWeight: 'bold' },
   botaoSalvar: { backgroundColor: '#0056b3' },
   botaoSalvarTexto: { color: '#fff', fontWeight: 'bold' }
-});
+}); 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity } from 'react-native';
 
@@ -24,9 +25,9 @@ export default function TermosPrivacidade({ navigation }) {
         <Text style={styles.bullet}>• Registro de frequência e gestão de turmas.</Text>
 
         <Text style={styles.itemTitulo}>2. Cadastro e Contas de Usuário</Text>
-        <Text style={styles.bullet}>• **Elegibilidade:** O acesso ao HelpCampus é destinado a estudantes, professores e gestores educacionais. Menores de idade devem ter o consentimento dos pais ou responsáveis legais.</Text>
-        <Text style={styles.bullet}>• **Veracidade das Informações:** O usuário compromete-se a fornecer dados exatos e verdadeiros.</Text>
-        <Text style={styles.bullet}>• **Segurança da Conta:** A senha é pessoal e intransferível, sendo de responsabilidade exclusiva do usuário.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Elegibilidade:</Text> O acesso ao HelpCampus é destinado a estudantes, professores e gestores educacionais. Menores de idade devem ter o consentimento dos pais ou responsáveis legais.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Veracidade das Informações:</Text> O usuário compromete-se a fornecer dados exatos e verdadeiros.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Segurança da Conta:</Text> A senha é pessoal e intransferível, sendo de responsabilidade exclusiva do usuário.</Text>
 
         <Text style={styles.itemTitulo}>3. Regras de Conduta e Uso Aceitável</Text>
         <Text style={styles.paragrafo}>É expressamente proibido transmitir conteúdos ofensivos, enviar spam, burlar mecanismos de segurança ou realizar engenharia reversa na plataforma.</Text>
@@ -40,9 +41,9 @@ export default function TermosPrivacidade({ navigation }) {
         <Text style={styles.secaoTitulo}>PARTE 2: POLÍTICA DE PRIVACIDADE (LGPD)</Text>
 
         <Text style={styles.itemTitulo}>1. Informações que Coletamos</Text>
-        <Text style={styles.bullet}>• **Dados de Cadastro:** Nome, e-mail, foto, tipo de perfil e vínculo institucional.</Text>
-        <Text style={styles.bullet}>• **Dados Acadêmicos e Uso:** Presença, notas, progresso, mensagens e interações.</Text>
-        <Text style={styles.bullet}>• **Dados Técnicos:** IP, tipo de navegador, modelo do dispositivo e dados offline.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Dados de Cadastro:</Text> Nome, e-mail, foto, tipo de perfil e vínculo institucional.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Dados Acadêmicos e Uso:</Text> Presença, notas, progresso, mensagens e interações.</Text>
+        <Text style={styles.bullet}>• <Text style={styles.bold}>Dados Técnicos:</Text> IP, tipo de navegador, modelo do dispositivo e dados offline.</Text>
 
         <Text style={styles.itemTitulo}>2. Finalidade do Tratamento dos Dados</Text>
         <Text style={styles.paragrafo}>Utilizamos os dados para prestação dos serviços, personalização de relatórios, comunicação de avisos escolares e segurança da plataforma.</Text>
@@ -51,7 +52,7 @@ export default function TermosPrivacidade({ navigation }) {
         <Text style={styles.paragrafo}>Não vendemos dados. O compartilhamento ocorre apenas com a instituição de ensino para fins pedagógicos, provedores de infraestrutura em nuvem essenciais ou exigência judicial.</Text>
 
         <Text style={styles.itemTitulo}>4. Direitos do Titular (LGPD)</Text>
-        <Text style={styles.paragrafo}>Você tiene direito de confirmar o tratamento, acessar, corrigir ou excluir seus dados, além de revogar o consentimento a qualquer momento.</Text>
+        <Text style={styles.paragrafo}>Você tem direito de confirmar o tratamento, acessar, corrigir ou excluir seus dados, além de revogar o consentimento a qualquer momento.</Text>
 
         <Text style={styles.secaoTitulo}>PARTE 3: CONTATO</Text>
         <Text style={styles.paragrafo}>
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
   itemTitulo: { fontSize: 14, fontWeight: 'bold', color: '#444', marginTop: 10, marginBottom: 5 },
   paragrafo: { fontSize: 13, color: '#555', lineHeight: 18, marginBottom: 8 },
   bullet: { fontSize: 13, color: '#555', lineHeight: 18, marginLeft: 10, marginBottom: 4 },
+  bold: { fontWeight: 'bold' },
   botaoVoltar: { backgroundColor: '#0056b3', padding: 12, borderRadius: 8, alignItems: 'center', marginTop: 25 },
   botaoVoltarTexto: { color: '#fff', fontWeight: 'bold', fontSize: 14 }
 });

@@ -1,7 +1,8 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { auth } from '../../firebaseConfig';
 
 export default function RecuperarSenha({ navigation }) {
   const [email, setEmail] = useState('');
