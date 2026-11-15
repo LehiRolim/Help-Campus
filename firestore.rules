@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /ocorrencias/{ocorrenciaId} {
+      function fotoValida(dados) {
+        return !('foto' in dados) || (
+          dados.foto is map
+          && dados.foto.keys().hasAll(['publicId', 'formato', 'largura', 'altura'])
+          && dados.foto.keys().hasOnly(['publicId', 'formato', 'largura', 'altura'])
+          && ocorrenciaId.matches('[a-zA-Z0-9]{20}')
+          && request.auth.uid.matches('[a-zA-Z0-9_-]{1,128}')
+          && dados.foto.publicId is string
+          && dados.foto.publicId.matches(
+            'help-campus/' + request.auth.uid + '/' + ocorrenciaId + '-[a-f0-9]{16}'
+          )
+          && dados.foto.formato == 'jpg'
+          && dados.foto.largura is int
+          && dados.foto.largura > 0
+          && dados.foto.largura <= 1600
+          && dados.foto.altura is int
+          && dados.foto.altura > 0
+          && dados.foto.altura <= 1600
+        );
+      }
+
+      allow read: if request.auth != null
+        && resource.data.usuarioId == request.auth.uid;
+
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll([
+          'descricao', 'local', 'categoria', 'prioridade',
+          'usuarioId', 'status', 'criadaEm'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'descricao', 'local', 'categoria', 'prioridade',
+          'usuarioId', 'status', 'criadaEm', 'foto'
+        ])
+        && request.resource.data.usuarioId == request.auth.uid
+        && request.resource.data.descricao is string
+        && request.resource.data.descricao.size() > 0
+        && request.resource.data.descricao.size() <= 2000
+        && request.resource.data.local is string
+        && request.resource.data.local.size() > 0
+        && request.resource.data.local.size() <= 200
+        && request.resource.data.categoria in [
+          'iluminacao', 'hidraulica', 'limpeza',
+          'infraestrutura', 'tecnologia', 'seguranca', 'outros'
+        ]
+        && request.resource.data.prioridade in ['alta', 'media', 'baixa']
+        && request.resource.data.status == 'aberta'
+        && request.resource.data.criadaEm == request.time
+        && fotoValida(request.resource.data);
+
+      allow update, delete: if false;
+    }
+  }
+}

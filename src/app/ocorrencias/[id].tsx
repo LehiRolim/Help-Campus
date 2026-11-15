@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { categorias } from '@/constants/categorias';
 import { StatusOcorrencia } from '@/components/status-ocorrencia';
+import { FotoOcorrencia } from '@/components/foto-ocorrencia';
 import { acompanharOcorrencia, garantirUsuario, type Ocorrencia } from '@/services/ocorrencias';
 import { styles } from '@/styles/ocorrencias';
 
@@ -111,6 +112,7 @@ function ConteudoDetalhes({ id }: { id: string | undefined }) {
       ) : ocorrencia && (
         <ScrollView contentContainerStyle={styles.conteudoDetalhes}>
           <Informacao titulo="Descrição" valor={ocorrencia.descricao} />
+          {ocorrencia.foto && <FotoOcorrencia key={ocorrencia.id} id={ocorrencia.id} />}
           <Informacao titulo="Local" valor={ocorrencia.local} />
           <Informacao titulo="Categoria" valor={
             categorias.find((item) => item.value === ocorrencia.categoria)?.label ?? ocorrencia.categoria

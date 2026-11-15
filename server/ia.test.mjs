@@ -102,3 +102,15 @@ test('health funciona sem Google e requisição grande é recusada', async (t) =
   assert.equal((await pedir({ descricao: 'x'.repeat(13000) })).status, 413);
   assert.equal(chamadas.length, 0);
 });
+
+test('rotas de foto também exigem sessão antes de acessar Firestore ou Cloudinary', async (t) => {
+  const { url, chamadas } = await executar(t);
+  for (const rota of ['/ocorrencias/com-foto', '/fotos/visualizar']) {
+    const resposta = await fetch(`${url}${rota}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ocorrenciaId: 'abcdefghijklmnopqrst' }),
+    });
+    assert.equal(resposta.status, 401);
+  }
+  assert.equal(chamadas.length, 0);
+});
