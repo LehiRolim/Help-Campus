@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
@@ -13,17 +12,18 @@ import {
   TextInput 
 } from 'react-native';
 import { signOut } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
+import { auth } from '@/services/firebase';
+import { router } from 'expo-router';
+import { useTheme } from '@/context/ThemeContext';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 
-export default function TelaPerfil({ navigation }) {
+export default function TelaPerfil() {
+  const { modoEscuro, alternarModoEscuro } = useTheme();
 
   const [nome, setNome] = useState('Mário Junior');
   const [usuarioEmail, setUsuarioEmail] = useState('');
   const [curso, setCurso] = useState('Análise e Desenvolvimento de Sistemas');
   const [matricula, setMatricula] = useState('2310948');
-
-  const [modoEscuro, setModoEscuro] = useState(false);
-  const [receberNotificacoes, setReceberNotificacoes] = useState(false);
 
   const [modalVisivel, setModalVisivel] = useState(false);
   const [editNome, setEditNome] = useState('');
@@ -83,6 +83,21 @@ export default function TelaPerfil({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={[styles.container, temaAtual.container]}>
+      
+      {/* Botão para voltar à tela de Ocorrências */}
+      <TouchableOpacity 
+        style={[styles.botaoVoltarOcorrencias, temaAtual.card]} 
+        onPress={() => {
+          if (router.canGoBack()) {
+            router.back();
+          } else {
+            router.replace('/');
+          }
+        }}
+      >
+        <Ionicons name="arrow-back" size={20} color={modoEscuro ? '#f1f1f1' : '#0056b3'} style={{ marginRight: 6 }} />
+        <Text style={[styles.botaoVoltarTexto, temaAtual.texto]}>Voltar para Ocorrências</Text>
+      </TouchableOpacity>
 
       <View style={[styles.headerCard, temaAtual.card]}>
         <Image 
@@ -99,42 +114,22 @@ export default function TelaPerfil({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, temaAtual.textoTitulo]}>Aparência</Text>
+      <View style={styles.sectionContainerCompacto}>
         <View style={[styles.menuItemFlex, temaAtual.card]}>
           <Text style={[styles.menuText, temaAtual.texto]}>🌙 Modo Escuro</Text>
           <Switch 
             value={modoEscuro} 
-            onValueChange={setModoEscuro}
+            onValueChange={alternarModoEscuro}
             trackColor={{ false: '#767577', true: '#0056b3' }}
             thumbColor={modoEscuro ? '#fff' : '#f4f3f4'}
           />
         </View>
-      </View>
 
-      <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, temaAtual.textoTitulo]}>Notificações e Alertas</Text>
-        
-        <View style={[styles.menuItemFlex, temaAtual.card]}>
-          <Text style={[styles.menuText, temaAtual.texto]}>🔔 Receber Notificações</Text>
-          <Switch 
-            value={receberNotificacoes} 
-            onValueChange={setReceberNotificacoes}
-            trackColor={{ false: '#767577', true: '#0056b3' }}
-            thumbColor={receberNotificacoes ? '#fff' : '#f4f3f4'}
-          />
-        </View>
-        <Text style={[styles.subAviso, temaAtual.textoSecundario]}>
-          Você receberá alertas quando seu chamado for solucionado, estiver sendo resolvido, for aceito, recusado ou aguardando resposta.
-        </Text>
-      </View>
-
-      <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, temaAtual.textoTitulo]}>Termos de Uso e Privacidade</Text>
-        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => navigation.navigate('TermosPrivacidade')}>
+        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => router.push('/termos')}>
           <Text style={[styles.menuText, temaAtual.texto]}>📄 Termos de Uso e Política de Privacidade</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => navigation.navigate('RecuperarSenha')}>
+
+        <TouchableOpacity style={[styles.menuItem, temaAtual.card]} onPress={() => router.push('/redefinir-senha')}>
           <Text style={[styles.menuText, temaAtual.texto]}>🔑 Redefinir Senha</Text>
         </TouchableOpacity>
       </View>
@@ -226,11 +221,21 @@ const estilosEscuros = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: { flexGrow: 1, padding: 20 },
+  botaoVoltarOcorrencias: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
+    borderWidth: 1,
+    elevation: 1,
+  },
+  botaoVoltarTexto: { fontSize: 14, fontWeight: '600' },
   headerCard: { 
     borderRadius: 12, 
     padding: 20, 
     alignItems: 'center', 
-    marginBottom: 20, 
+    marginBottom: 15, 
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -243,7 +248,6 @@ const styles = StyleSheet.create({
   email: { fontSize: 14, marginBottom: 3 },
   curso: { fontSize: 13, color: '#0056b3', fontWeight: '600', textAlign: 'center', marginBottom: 4 },
   matricula: { fontSize: 13, fontWeight: '500', marginBottom: 12 },
-  
   botaoEditar: { 
     backgroundColor: '#e9ecef', 
     paddingVertical: 8, 
@@ -252,31 +256,27 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   botaoEditarTexto: { color: '#0056b3', fontWeight: '600', fontSize: 13 },
-
-  sectionContainer: { marginBottom: 20 },
-  sectionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 10, marginLeft: 5 },
-  
+  sectionContainer: { marginBottom: 15 },
+  sectionContainerCompacto: { marginBottom: 10 },
+  sectionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, marginLeft: 5 },
   menuItem: { 
-    padding: 15, 
+    padding: 14, 
     borderRadius: 8, 
-    marginBottom: 8, 
+    marginBottom: 6, 
     borderWidth: 1 
   },
   menuItemFlex: { 
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    padding: 15, 
+    padding: 14, 
     borderRadius: 8, 
-    marginBottom: 8, 
+    marginBottom: 6, 
     borderWidth: 1 
   },
   menuText: { fontSize: 15 },
-  subAviso: { fontSize: 12, marginTop: 4, marginLeft: 5, fontStyle: 'italic', lineHeight: 16 },
-
   botaoSair: { backgroundColor: '#d9534f', padding: 15, borderRadius: 8, alignItems: 'center' },
   botaoSairTexto: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
-
   modalOverlay: { 
     flex: 1, 
     backgroundColor: 'rgba(0,0,0,0.5)', 
@@ -307,4 +307,4 @@ const styles = StyleSheet.create({
   botaoCancelarTexto: { color: '#fff', fontWeight: 'bold' },
   botaoSalvar: { backgroundColor: '#0056b3' },
   botaoSalvarTexto: { color: '#fff', fontWeight: 'bold' }
-}); 
+});

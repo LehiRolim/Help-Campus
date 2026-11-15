@@ -14,7 +14,13 @@
     },
     "plugins": [
       "expo-router",
-      ["expo-splash-screen", { "backgroundColor": "#ffffff" }]
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "@react-native-vector-icons/ionicons"
     ],
     "experiments": {
       "typedRoutes": true,
