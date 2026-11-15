@@ -1,4 +1,5 @@
-import { Picker } from '@expo/ui/community/picker';
+import { criarIdOcorrencia } from '@/services/ocorrencias';
+import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
@@ -10,9 +11,11 @@ import { CampoFoto } from '@/components/campo-foto';
 import { SugestaoCategoria } from '@/components/sugestao-categoria';
 import { categorias, tamanhoMaximoDescricao } from '@/constants/categorias';
 import { styles } from '@/styles/ocorrencias';
-import { criarIdOcorrencia, salvarOcorrencia } from '@/services/ocorrencias';
+import { salvarOcorrencia } from '@/services/ocorrencias';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function NovaOcorrencia() {
+  const { modoEscuro } = useTheme();
 
   const [prioridade, setPrioridade] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -72,7 +75,7 @@ export default function NovaOcorrencia() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { paddingHorizontal: 16 }]}>
+    <SafeAreaView style={[styles.container, { paddingHorizontal: 16 }, modoEscuro && { backgroundColor: '#121212' }]}>
       <View style={styles.cabecalhoNova}>
         <TouchableOpacity
           style={styles.botaoVoltar}
@@ -87,18 +90,18 @@ export default function NovaOcorrencia() {
           accessibilityRole="button"
           accessibilityLabel="Voltar para ocorrências"
         >
-          <Ionicons name="arrow-back" size={28} color="black" />
+          <Ionicons name="arrow-back" size={28} color={modoEscuro ? '#f1f1f1' : 'black'} />
         </TouchableOpacity>
 
-        <Text style={styles.title_novaOcorrencia}>Nova ocorrência</Text>
+        <Text style={[styles.title_novaOcorrencia, modoEscuro && { color: '#f1f1f1' }]}>Nova ocorrência</Text>
       </View>
 
       <ScrollView keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
         <View style={styles.campoDescricao}>
-          <Text style={styles.texto_input}>Descrição</Text>
+          <Text style={[styles.texto_input, modoEscuro && { color: '#f1f1f1' }]}>Descrição</Text>
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, modoEscuro && { backgroundColor: '#1e1e1e', borderColor: '#333', color: '#f1f1f1' }]}
             value={descricao}
             editable={!salvando}
             onChangeText={(texto) => {
@@ -107,7 +110,7 @@ export default function NovaOcorrencia() {
             }}
             maxLength={tamanhoMaximoDescricao}
             placeholder="Descreva o problema"
-            placeholderTextColor="#60646c"
+            placeholderTextColor={modoEscuro ? '#888' : '#60646c'}
             accessibilityLabel="Descrição da ocorrência"
             multiline
           />
@@ -116,16 +119,16 @@ export default function NovaOcorrencia() {
         <CampoFoto value={foto} disabled={salvando} onChange={setFoto} onPreparandoChange={setPreparandoFoto} />
 
         <View style={styles.campoDescricao}>
-          <Text style={styles.texto_input}>Local</Text>
+          <Text style={[styles.texto_input, modoEscuro && { color: '#f1f1f1' }]}>Local</Text>
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, modoEscuro && { backgroundColor: '#1e1e1e', borderColor: '#333', color: '#f1f1f1' }]}
             value={local}
             editable={!salvando}
             onChangeText={setLocal}
             maxLength={200}
             placeholder="Ex: Bloco C, sala 32"
-            placeholderTextColor="#60646c"
+            placeholderTextColor={modoEscuro ? '#888' : '#60646c'}
             accessibilityLabel="Local da ocorrência"
           />
         </View>
@@ -134,19 +137,20 @@ export default function NovaOcorrencia() {
         <SugestaoCategoria key={`${versaoDescricao}-${salvando}`} descricao={descricao} desabilitado={salvando} onAceitar={setCategoria} />
 
         <View style={styles.campoDescricao}>
-          <Text style={styles.texto_input} >Prioridade</Text>
+          <Text style={[styles.texto_input, modoEscuro && { color: '#f1f1f1' }]}>Prioridade</Text>
 
-          <View style={styles.seletorPrioridade}>
+          <View style={[styles.seletorPrioridade, modoEscuro && { backgroundColor: '#1e1e1e', borderColor: '#333' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Picker
-                style={{ flex: 1 }}
+                style={[{ flex: 1 }, modoEscuro && { color: '#f1f1f1', backgroundColor: '#1e1e1e' }]}
+                dropdownIconColor={modoEscuro ? '#f1f1f1' : '#111827'}
                 selectedValue={prioridade}
                 onValueChange={(valor) => setPrioridade(valor)}
               >
-                <Picker.Item label="Selecione uma prioridade" value="" />
-                <Picker.Item label="Alta" value="alta" />
-                <Picker.Item label="Média" value="media" />
-                <Picker.Item label="Baixa" value="baixa" />
+                <Picker.Item label="Selecione uma prioridade" value="" color={modoEscuro ? '#888' : '#111827'} />
+                <Picker.Item label="Alta" value="alta" color={modoEscuro ? '#f1f1f1' : '#111827'} />
+                <Picker.Item label="Média" value="media" color={modoEscuro ? '#f1f1f1' : '#111827'} />
+                <Picker.Item label="Baixa" value="baixa" color={modoEscuro ? '#f1f1f1' : '#111827'} />
               </Picker>
 
               <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
@@ -155,6 +159,7 @@ export default function NovaOcorrencia() {
             </View>
           </View>
         </View>
+
         {!!erro && (
           <Text
             accessibilityRole="alert"
@@ -186,4 +191,4 @@ export default function NovaOcorrencia() {
       </ScrollView>
     </SafeAreaView>
   );
-}
+} 
