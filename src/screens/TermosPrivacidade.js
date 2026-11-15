@@ -1,8 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 
-export default function TermosPrivacidade({ navigation }) {
+export default function TermosPrivacidade() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
@@ -59,7 +60,7 @@ export default function TermosPrivacidade({ navigation }) {
           Para exercer seus direitos ou tirar dúvidas com o Encarregado de Proteção de Dados (DPO), entre em contato através do e-mail de suporte da plataforma.
         </Text>
 
-        <TouchableOpacity style={styles.botaoVoltar} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.botaoVoltar} onPress={() => router.canGoBack() ? router.back() : router.replace('/perfil')}>
           <Text style={styles.botaoVoltarTexto}>Fechar Termos</Text>
         </TouchableOpacity>
       </View>

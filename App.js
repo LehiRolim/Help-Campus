@@ -2,9 +2,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import TelaPerfil from './TelaPerfil';
-import RecuperarSenha from './RecuperarSenha';
-import TermosPrivacidade from './TermosPrivacidade';
+import TelaPerfil from './src/screens/TelaPerfil';
+import RecuperarSenha from './src/screens/RecuperarSenha';
+import TermosPrivacidade from './src/screens/TermosPrivacidade';
 
 const Stack = createNativeStackNavigator();
 

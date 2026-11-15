@@ -71,7 +71,11 @@ export default function TelaOcorrencias() {
           >
             <Ionicons name={filtroStatus === 'todas' ? 'funnel-outline' : 'funnel'} size={25} color="#0147f6" />
           </Pressable>
-          <Ionicons name="person-circle" size={29} color="#0147f6" />
+          <Link href="/perfil" asChild>
+            <Pressable style={styles.botaoFiltro} accessibilityRole="button" accessibilityLabel="Abrir perfil">
+              <Ionicons name="person-circle" size={29} color="#0147f6" />
+            </Pressable>
+          </Link>
         </View>
       </View>
 

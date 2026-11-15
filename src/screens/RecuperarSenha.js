@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
+import { router } from 'expo-router';
+import { auth } from '@/services/auth';
 
-export default function RecuperarSenha({ navigation }) {
+export default function RecuperarSenha() {
   const [email, setEmail] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [erro, setErro] = useState('');
@@ -59,8 +60,8 @@ export default function RecuperarSenha({ navigation }) {
           <Text style={styles.botaoTexto}>Enviar Instruções</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.link} onPress={() => navigation.goBack()}>
-          <Text style={styles.linkTexto}>← Voltar ao Login</Text>
+        <TouchableOpacity style={styles.link} onPress={() => router.canGoBack() ? router.back() : router.replace('/perfil')}>
+          <Text style={styles.linkTexto}>← Voltar</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -14,7 +14,12 @@
     },
     "plugins": [
       "expo-router",
-      ["expo-splash-screen", { "backgroundColor": "#ffffff" }]
+      ["expo-splash-screen", { "backgroundColor": "#ffffff" }],
+      ["expo-image-picker", {
+        "photosPermission": "Permitir selecionar uma foto para anexar à ocorrência.",
+        "cameraPermission": false,
+        "microphonePermission": false
+      }]
     ],
     "experiments": {
       "typedRoutes": true,
