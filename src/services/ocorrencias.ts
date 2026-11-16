@@ -1,11 +1,11 @@
 import { signInAnonymously, type User } from 'firebase/auth';
 import {
-    addDoc,
     collection,
     doc,
     onSnapshot,
     query,
     serverTimestamp,
+    setDoc,
     where,
     type Timestamp,
 } from 'firebase/firestore';
@@ -18,10 +18,11 @@ import {
 import { auth } from './auth';
 import { db } from './firebase';
 import type { StatusOcorrencia } from '@/constants/status-ocorrencias';
+import { salvarComFoto, type FotoLocal, type FotoSalva } from './fotos';
 
 export type Prioridade = 'alta' | 'media' | 'baixa';
 
-type NovaOcorrencia = {
+export type NovaOcorrencia = {
   descricao: string;
   local: string;
   categoria: Categoria;
@@ -33,6 +34,7 @@ export type Ocorrencia = NovaOcorrencia & {
   usuarioId: string;
   status: StatusOcorrencia;
   criadaEm: Timestamp | null;
+  foto?: FotoSalva;
 };
 
 export function acompanharOcorrencia(
@@ -102,7 +104,9 @@ export function garantirUsuario(): Promise<User> {
 }
 
 // Valida os campos e grava uma ocorrência no Firestore.
-export async function salvarOcorrencia(dados: NovaOcorrencia) {
+export function criarIdOcorrencia() { return doc(collection(db, 'ocorrencias')).id; }
+
+export async function salvarOcorrencia(dados: NovaOcorrencia, opcoes: { id?: string; foto?: FotoLocal | null } = {}) {
   const descricao = dados.descricao.trim();
   const local = dados.local.trim();
 
@@ -119,8 +123,12 @@ export async function salvarOcorrencia(dados: NovaOcorrencia) {
   }
 
   const usuario = await garantirUsuario();
+  const id = opcoes.id ?? criarIdOcorrencia();
+  if (opcoes.foto) {
+    return salvarComFoto({ ...dados, descricao, local }, id, opcoes.foto, await usuario.getIdToken());
+  }
 
-  const documento = await addDoc(collection(db, 'ocorrencias'), {
+  await setDoc(doc(db, 'ocorrencias', id), {
     descricao,
     local,
     categoria: dados.categoria,
@@ -130,5 +138,5 @@ export async function salvarOcorrencia(dados: NovaOcorrencia) {
     criadaEm: serverTimestamp(),
   });
 
-  return documento.id;
+  return id;
 }

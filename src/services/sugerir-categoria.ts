@@ -9,7 +9,6 @@ export async function sugerirCategoria(descricao: string, signal: AbortSignal): 
     throw new Error('Descreva o problema com pelo menos 10 caracteres.');
   }
   const base = endereco.replace(/\/+$/, '');
-  // Acorda a hospedagem gratuita antes de enviar a descrição ou o token.
   try {
     const health = await fetch(`${base}/health`, { signal });
     if (!health.ok || (await health.json()).ok !== true) throw new Error('Servidor indisponível.');
@@ -22,7 +21,8 @@ export async function sugerirCategoria(descricao: string, signal: AbortSignal): 
   let resposta;
   try {
     resposta = await fetch(`${base}/sugerir-categoria`, {
-      method: 'POST', signal,
+      method: 'POST',
+      signal,
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ descricao: texto }),
     });
@@ -30,11 +30,13 @@ export async function sugerirCategoria(descricao: string, signal: AbortSignal): 
     throw new Error('Não foi possível conectar à IA. Verifique sua conexão ou escolha manualmente.');
   }
   let dados;
-  try { dados = await resposta.json(); } catch {
+  try {
+    dados = await resposta.json();
+  } catch {
     throw new Error('O servidor da IA não está pronto. Tente novamente em instantes.');
   }
   if (!resposta.ok) throw new Error(typeof dados.erro === 'string' ? dados.erro : 'Não foi possível sugerir uma categoria.');
   const categoria = categorias.find((item) => item.value === dados.categoria);
   if (!categoria) throw new Error('A IA retornou uma categoria inválida. Escolha manualmente.');
   return categoria.value;
-}
+} 

@@ -4,7 +4,7 @@ services:
     name: help-campus-ia
     runtime: node
     plan: free
-    buildCommand: node --check server/iniciar.mjs && node --check server/ia.mjs
+    buildCommand: node --check server/iniciar.mjs && node --check server/ia.mjs && node --check server/fotos.mjs
     startCommand: node server/iniciar.mjs
     healthCheckPath: /health
     autoDeployTrigger: 'off'
@@ -19,3 +19,9 @@ services:
         value: help-campus-b6d64
       - key: GEMINI_MODEL
         value: gemini-3.5-flash-lite
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

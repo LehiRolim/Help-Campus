@@ -1,4 +1,4 @@
-import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
@@ -6,8 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { categorias } from '@/constants/categorias';
 import { StatusOcorrencia } from '@/components/status-ocorrencia';
+import { FotoOcorrencia } from '@/components/foto-ocorrencia';
 import { acompanharOcorrencia, garantirUsuario, type Ocorrencia } from '@/services/ocorrencias';
 import { styles } from '@/styles/ocorrencias';
+import { useTheme } from '@/context/ThemeContext';
 
 const prioridades = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 
@@ -22,16 +24,17 @@ function voltar() {
   else router.replace('/');
 }
 
-function Informacao({ titulo, valor }: { titulo: string; valor: string }) {
+function Informacao({ titulo, valor, modoEscuro }: { titulo: string; valor: string; modoEscuro: boolean }) {
   return (
-    <View style={styles.campoDetalhe}>
-      <Text style={styles.rotuloDetalhe}>{titulo}</Text>
-      <Text selectable style={styles.valorDetalhe}>{valor}</Text>
+    <View style={[styles.campoDetalhe, modoEscuro && { backgroundColor: '#1e1e1e', borderColor: '#333' }]}>
+      <Text style={[styles.rotuloDetalhe, modoEscuro && { color: '#aaa' }]}>{titulo}</Text>
+      <Text selectable style={[styles.valorDetalhe, modoEscuro && { color: '#f1f1f1' }]}>{valor}</Text>
     </View>
   );
 }
 
 function ConteudoDetalhes({ id }: { id: string | undefined }) {
+  const { modoEscuro } = useTheme();
   const [estado, setEstado] = useState<Estado>({ tipo: 'carregando' });
   const [tentativa, setTentativa] = useState(0);
   const idValido = !!id && !id.includes('/');
@@ -68,7 +71,7 @@ function ConteudoDetalhes({ id }: { id: string | undefined }) {
   const ocorrencia = estado.tipo === 'pronto' ? estado.ocorrencia : null;
 
   return (
-    <SafeAreaView style={[styles.container, { paddingHorizontal: 16 }]}>
+    <SafeAreaView style={[styles.container, { paddingHorizontal: 16 }, modoEscuro && { backgroundColor: '#121212' }]}>
       <View style={styles.cabecalhoNova}>
         <Pressable
           onPress={voltar}
@@ -76,25 +79,25 @@ function ConteudoDetalhes({ id }: { id: string | undefined }) {
           accessibilityRole="button"
           accessibilityLabel="Voltar para ocorrências"
         >
-          <Ionicons name="arrow-back" size={28} color="#111827" />
+          <Ionicons name="arrow-back" size={28} color={modoEscuro ? '#f1f1f1' : '#111827'} />
         </Pressable>
-        <Text accessibilityRole="header" style={styles.title_novaOcorrencia}>
+        <Text accessibilityRole="header" style={[styles.title_novaOcorrencia, modoEscuro && { color: '#f1f1f1' }]}>
           Detalhes da ocorrência
         </Text>
       </View>
 
       {!idValido || estado.tipo === 'indisponivel' ? (
         <View style={styles.estadoLista}>
-          <Text style={styles.textoEstadoLista}>Ocorrência não encontrada ou indisponível.</Text>
+          <Text style={[styles.textoEstadoLista, modoEscuro && { color: '#aaa' }]}>Ocorrência não encontrada ou indisponível.</Text>
         </View>
       ) : estado.tipo === 'carregando' ? (
         <View style={styles.estadoLista}>
           <ActivityIndicator size="large" color="#0147f6" />
-          <Text style={styles.textoEstadoLista}>Carregando detalhes...</Text>
+          <Text style={[styles.textoEstadoLista, modoEscuro && { color: '#aaa' }]}>Carregando detalhes...</Text>
         </View>
       ) : estado.tipo === 'erro' ? (
         <View style={styles.estadoLista}>
-          <Text accessibilityRole="alert" style={styles.textoEstadoLista}>
+          <Text accessibilityRole="alert" style={[styles.textoEstadoLista, modoEscuro && { color: '#aaa' }]}>
             Não foi possível abrir esta ocorrência. Verifique sua conexão e se você tem acesso ao registro.
           </Text>
           <Pressable
@@ -110,21 +113,27 @@ function ConteudoDetalhes({ id }: { id: string | undefined }) {
         </View>
       ) : ocorrencia && (
         <ScrollView contentContainerStyle={styles.conteudoDetalhes}>
-          <Informacao titulo="Descrição" valor={ocorrencia.descricao} />
-          <Informacao titulo="Local" valor={ocorrencia.local} />
-          <Informacao titulo="Categoria" valor={
-            categorias.find((item) => item.value === ocorrencia.categoria)?.label ?? ocorrencia.categoria
-          } />
-          <Informacao titulo="Prioridade" valor={prioridades[ocorrencia.prioridade] ?? ocorrencia.prioridade} />
-          <View style={styles.campoDetalhe}>
-            <Text style={styles.rotuloDetalhe}>Status</Text>
-            <StatusOcorrencia status={ocorrencia.status} estiloTexto={styles.valorDetalhe} />
+          <Informacao titulo="Descrição" valor={ocorrencia.descricao} modoEscuro={modoEscuro} />
+          <Informacao titulo="Local" valor={ocorrencia.local} modoEscuro={modoEscuro} />
+          <Informacao
+            titulo="Categoria"
+            valor={categorias.find((item) => item.value === ocorrencia.categoria)?.label ?? ocorrencia.categoria}
+            modoEscuro={modoEscuro}
+          />
+          <Informacao
+            titulo="Prioridade"
+            valor={prioridades[ocorrencia.prioridade] ?? ocorrencia.prioridade}
+            modoEscuro={modoEscuro}
+          />
+          <View style={[styles.campoDetalhe, modoEscuro && { backgroundColor: '#1e1e1e', borderColor: '#333' }]}>
+            <Text style={[styles.rotuloDetalhe, modoEscuro && { color: '#aaa' }]}>Status</Text>
+            <StatusOcorrencia status={ocorrencia.status} estiloTexto={[styles.valorDetalhe, modoEscuro && { color: '#f1f1f1' }]} />
           </View>
-          <Informacao titulo="Data de criação" valor={
-            ocorrencia.criadaEm
-              ? ocorrencia.criadaEm.toDate().toLocaleString('pt-BR')
-              : 'Aguardando confirmação'
-          } />
+          <Informacao
+            titulo="Data de criação"
+            valor={ocorrencia.criadaEm ? ocorrencia.criadaEm.toDate().toLocaleString('pt-BR') : 'Aguardando confirmação'}
+            modoEscuro={modoEscuro}
+          />
         </ScrollView>
       )}
     </SafeAreaView>
