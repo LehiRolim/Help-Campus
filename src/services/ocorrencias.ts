@@ -79,28 +79,24 @@ export function acompanharOcorrencias(
   }, aoFalhar);
 }
 
-let sessao: Promise<User> | undefined;
+let autenticacaoPendente: Promise<User> | undefined;
 
-// Recupera o usuário salvo ou cria um usuário anônimo.
-export function garantirUsuario(): Promise<User> {
-  if (!sessao) {
-    sessao = (async () => {
-      await auth.authStateReady();
+export async function garantirUsuario(): Promise<User> {
+  await auth.authStateReady();
 
-      if (auth.currentUser) {
-        return auth.currentUser;
-      }
-
-      const resultado = await signInAnonymously(auth);
-
-      return resultado.user;
-    })().catch((erro) => {
-      sessao = undefined;
-      throw erro;
-    });
+  if (auth.currentUser) {
+    return auth.currentUser;
   }
 
-  return sessao;
+  if (!autenticacaoPendente) {
+    autenticacaoPendente = signInAnonymously(auth)
+      .then((resultado) => resultado.user)
+      .finally(() => {
+        autenticacaoPendente = undefined;
+      });
+  }
+
+  return autenticacaoPendente;
 }
 
 // Valida os campos e grava uma ocorrência no Firestore.

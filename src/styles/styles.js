@@ -147,4 +147,40 @@ const estilo = StyleSheet.create({
   
 });
 
+export const estilosEscuros = StyleSheet.create({
+  container: {
+    backgroundColor: '#101827',
+  },
+  tituloLogo: {
+    color: '#FFFFFF',
+  },
+  subtitulo: {
+    color: '#CBD5E1',
+  },
+  input: {
+    backgroundColor: '#1E293B',
+    color: '#FFFFFF',
+    borderColor: '#475569',
+  },
+  divisorTexto: {
+    color: '#CBD5E1',
+  },
+  seletorWrapper: {
+    backgroundColor: '#1E293B',
+    borderColor: '#64748B',
+  },
+  opcaoTexto: {
+    color: '#BFDBFE',
+  },
+  opcaoTextoAtivo: {
+    color: '#FFFFFF',
+  },
+  botaoAcessar: {
+    backgroundColor: '#3B82F6',
+  },
+  textoBotaoAcessar: {
+    color: '#FFFFFF',
+  },
+});
+
 export default estilo;

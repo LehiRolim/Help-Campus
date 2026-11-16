@@ -1,15 +1,36 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ThemeContext = createContext({
   modoEscuro: false,
-  alternarModoEscuro: (valor) => {}
+  alternarModoEscuro: (/** @type {boolean} */ valor) => {}
 });
 
+/** @param {{ children: React.ReactNode }} props */
 export function ThemeProvider({ children }) {
   const [modoEscuro, setModoEscuro] = useState(false);
 
-  const alternarModoEscuro = (valor) => {
+  useEffect(() => {
+    const carregarTema = async () => {
+      try {
+        const temaSalvo = await AsyncStorage.getItem('helpCampusModoEscuro');
+
+        if (temaSalvo !== null) {
+          setModoEscuro(temaSalvo === 'true');
+        }
+      } catch (erro) {
+        console.error('Erro ao carregar tema:', erro);
+      }
+    };
+
+    carregarTema();
+  }, []);
+
+  const alternarModoEscuro = (/** @type {boolean} */ valor) => {
     setModoEscuro(valor);
+
+    AsyncStorage.setItem('helpCampusModoEscuro', String(valor))
+      .catch((erro) => console.error('Erro ao salvar tema:', erro));
   };
 
   return (

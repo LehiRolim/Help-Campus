@@ -1,4 +1,4 @@
-import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { Text, View, type StyleProp, type TextStyle } from 'react-native';
 
 import { nomesStatus, type StatusOcorrencia as Status } from '@/constants/status-ocorrencias';

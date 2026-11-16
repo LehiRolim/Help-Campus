@@ -181,3 +181,21 @@ export const styles = StyleSheet.create({
   botaoFoto: { flexGrow: 1 },
 
 });
+
+
+export const estilosEscurosOcorrencias = StyleSheet.create({
+  container: { backgroundColor: '#101827' },
+  title: { color: '#FFFFFF' },
+  linhas: { borderBottomColor: '#475569' },
+  cartaoOcorrencia: { backgroundColor: '#1E293B', borderColor: '#475569' },
+  tituloCartaoOcorrencia: { color: '#FFFFFF' },
+  textoCartaoOcorrencia: { color: '#CBD5E1' },
+  textoEstadoLista: { color: '#CBD5E1' },
+  rotuloDetalhe: { color: '#CBD5E1' },
+  painelFiltros: { backgroundColor: '#101827' },
+  opcaoFiltro: { borderColor: '#64748B' },
+  textoOpcaoFiltro: { color: '#E2E8F0' },
+  botaoFiltroAtivo: { backgroundColor: '#334155' },
+  linkDetalhes: { color: '#93C5FD' },
+  textoLimparFiltro: { color: '#93C5FD' },
+});

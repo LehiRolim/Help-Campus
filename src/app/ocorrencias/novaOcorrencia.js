@@ -1,6 +1,6 @@
 import { criarIdOcorrencia } from '@/services/ocorrencias';
 import { Picker } from '@react-native-picker/picker';
-import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -64,7 +64,7 @@ export default function NovaOcorrencia() {
         prioridade,
       }, { id: idOcorrencia.current, foto });
 
-      router.replace('/');
+      router.replace('/ocorrencias');
     } catch (falha) {
       console.error('Erro ao salvar ocorrência:', falha);
       setErro(falha instanceof Error ? falha.message : 'Não foi possível salvar. Verifique sua conexão e tente novamente.');

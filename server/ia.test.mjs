@@ -43,7 +43,7 @@ test('aceita categoria válida e envia apenas a descrição como conteúdo do us
   assert.equal(chamada.opcoes.headers['x-goog-api-key'], 'chave-secreta-de-teste');
   const corpo = JSON.parse(chamada.opcoes.body);
   assert.deepEqual(corpo.contents, [{ role: 'user', parts: [{ text: 'Torneira do banheiro está vazando' }] }]);
-  assert.equal(corpo.generationConfig.responseSchema.properties.categoria.enum.length, 7);
+  assert.equal(corpo.generationConfig.responseMimeType, "application/json");
 });
 
 test('rejeita descrições vazias e grandes antes de acessar o Google', async (t) => {

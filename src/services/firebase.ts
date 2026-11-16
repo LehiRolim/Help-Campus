@@ -5,12 +5,12 @@ import { getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAK_N1FGQDSDDdGzI-mLGeHFc0XmimkOAs",
-  authDomain: "help-campus.firebaseapp.com",
-  projectId: "help-campus",
-  storageBucket: "help-campus.firebasestorage.app",
-  messagingSenderId: "999750859533",
-  appId: "1:999750859533:web:8a2530b3de580a7e8ace44"
+  apiKey: "AIzaSyACF7hvlxU_ARlntechBysyRM7fjQd4XWw",
+  authDomain: "help-campus-b6d64.firebaseapp.com",
+  projectId: "help-campus-b6d64",
+  storageBucket: "help-campus-b6d64.firebasestorage.app",
+  messagingSenderId: "44538956424",
+  appId: "1:44538956424:web:5202929fe3dbd0b10ead3d"
 };
 
 export const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);

@@ -1,57 +1,85 @@
-<<<<<<< HEAD
-# Sample Snack app
-
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
-
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo cli](https://docs.expo.dev/get-started/installation/#expo-cli)).
-
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
-
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.dev/c/expo-dev-tools/61) or [Discord](https://chat.expo.dev/).
-
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
-=======
 # Help Campus
 
-**Help Campus** is a proposed platform that facilitates and centralizes the reporting of issues related to infrastructure, equipment, and services among students, professores, and the administration of the University of Fortaleza (UNIFOR), enabling the logging, categorization, and status tracking of the resolution of incidents on campus.
+**Help Campus** is a mobile application developed to help students, professors, and university staff report and manage issues at the University of Fortaleza (UNIFOR).
 
-## Introduction
+The application makes it easier to report problems, track their status, and improve communication between the university community and the staff responsible for resolving them.
 
-The platform will allow students to report issues involving equipment such as air conditioners and chairs, as well as problems related to lawns, animals on campus, and other facilities.
+## Description
 
-Reports may include photos, location, and a description of the problem to help with its resolution. Users will also be able to track the status of each report through visual symbols displayed on their profile screen.
+Help Campus allows users to report problems related to university infrastructure, equipment, classrooms, and other campus facilities.
 
-In this way, the project aims to make communication with university management faster, more organized, and more efficient.
+Users can describe an issue, select its category and priority, provide its location, and attach a photo.
+
+University staff can view reported issues, manage their status, and mark them as resolved.
 
 ## Main Features
 
-- **Report infrastructure issues** — students can report problems with equipment, classrooms, lawns, campus animals, and other facilities.
-- **Add photos and location** — users can attach images and indicate where the problem occurred.
-- **Describe the issue** — each report can include details to help identify and solve the problem.
-- **Track report status** — users can monitor whether the issue is pending, being resolved, or completed.
-- **View report history** — students can access previously submitted reports and their current status.
+- **User Authentication:** Users can register and log in securely.
+- **User Roles:** Different access levels for students, professors, and university staff.
+- **Report Issues:** Create reports with descriptions, categories, locations, and priorities.
+- **Photo Attachments:** Add images to help identify reported problems.
+- **Report Tracking:** View submitted reports and monitor their status.
+- **Status Management:** Authorized staff can close and reopen reports.
+- **Real-Time Updates:** Report changes are synchronized through Firebase.
+- **Report Filtering:** Filter reports by status.
+- **User Profile:** View and update profile information.
+- **Dark Mode:** Switch between light and dark themes.
 
-## Project's Organization
+## Technologies
 
-*
-*
-*
+- **React Native:** Mobile application development.
+- **Expo:** Development and testing environment.
+- **JavaScript and TypeScript:** Programming languages.
+- **Firebase Authentication:** User authentication.
+- **Cloud Firestore:** Database and real-time updates.
+- **Expo Router:** Navigation between application screens.
+- **Git and GitHub:** Version control and team collaboration.
 
-## To Install early
+## Project Organization
 
-*
-*
-*
+The project was developed by a team of four students.
 
-## To Run
+- **Lehi Rolim:** Incident reporting screens and AI-related features.
+- **Mário Junior:** Firebase integration, user profile, and password recovery.
+- **Ismael Marinho:** Login and registration screens.
+- **Victor Andrade:** Incident details and staff incident management.
 
-*
-*
-*
+## Installation
 
-## Expected result
+1. Install Node.js and npm.
+2. Clone the GitHub repository.
+3. Open the project folder.
+4. Install the dependencies:
 
-Low-fidelity wireframe
+```bash
+npm install
+```
+
+## How to Run
+
+1. Open a terminal in the project folder.
+2. Start the Expo development server:
+
+```bash
+npx expo start
+```
+
+3. Install Expo Go on an Android or iOS device.
+4. Scan the QR code displayed in the terminal.
+5. Open the application and log in or create an account.
+
+An internet connection is required to use Firebase services.
+
+## Expected Result
+
+The application provides a simple interface for reporting and managing campus issues.
+
+Users can register, submit reports, and track their status. University staff can manage reports and update their status.
+
+### Low-Fidelity Wireframe
+
 ![Low-fidelity wireframe](images/Low-fidelity%20wireframe.jpeg)
 
->>>>>>> origin/main
+## Academic Project
+
+Developed for the **Mobile Platform Development** course at the University of Fortaleza (UNIFOR).

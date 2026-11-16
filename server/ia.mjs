@@ -1,4 +1,3 @@
-import { criarServidor } from './src/servidor.mjs';
 import dns from 'node:dns';
 import net from 'node:net';
 import { createServer } from 'node:http';

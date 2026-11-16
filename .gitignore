@@ -39,3 +39,7 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Scripts locais de demonstracao
+/alterar-senha-demo.mjs
+/src/services/contas-demo.js

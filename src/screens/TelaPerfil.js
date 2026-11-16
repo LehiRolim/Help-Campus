@@ -15,21 +15,48 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
 import { router } from 'expo-router';
 import { useTheme } from '@/context/ThemeContext';
-import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/services/firebase';
 
 export default function TelaPerfil() {
   const { modoEscuro, alternarModoEscuro } = useTheme();
 
-  const [nome, setNome] = useState('Mário Junior');
-  const [usuarioEmail, setUsuarioEmail] = useState(() => auth.currentUser?.email || 'mario@aluno.unifor.br');
-  const [curso, setCurso] = useState('Análise e Desenvolvimento de Sistemas');
-  const [matricula, setMatricula] = useState('2310948');
+  const [nome, setNome] = useState('');
+  const [usuarioEmail, setUsuarioEmail] = useState('');
+  const [curso, setCurso] = useState('');
+  const [matricula, setMatricula] = useState('');
 
   const [modalVisivel, setModalVisivel] = useState(false);
   const [editNome, setEditNome] = useState('');
   const [editEmail, setEditEmail] = useState('');
   const [editCurso, setEditCurso] = useState('');
   const [editMatricula, setEditMatricula] = useState('');
+
+  useEffect(() => {
+  const carregarPerfil = async () => {
+    const usuario = auth.currentUser;
+    if (!usuario) return;
+
+    try {
+      const documento = await getDoc(doc(db, 'usuarios', usuario.uid));
+
+      if (documento.exists()) {
+        const dados = documento.data();
+
+        setNome(dados.nome || '');
+        setUsuarioEmail(dados.email || '');
+        setCurso(dados.curso || '');
+        setMatricula(dados.matricula || '');
+      }
+    } catch (erro) {
+      console.error('Erro ao carregar perfil:', erro);
+      Alert.alert('Erro', 'Não foi possível carregar o perfil.');
+    }
+  };
+
+  carregarPerfil();
+}, []);
 
   const abrirModalEdicao = () => {
     setEditNome(nome);
@@ -39,40 +66,46 @@ export default function TelaPerfil() {
     setModalVisivel(true);
   };
 
-  const salvarPerfil = () => {
-    if (!editNome.trim()) {
-      Alert.alert('Campo Obrigatório', 'Por favor, insira o seu nome.');
-      return;
-    }
+  const salvarPerfil = async () => {
+  if (!editNome.trim()) {
+    Alert.alert('Atenção', 'Informe seu nome.');
+    return;
+  }
 
-    const matriculaLimpa = editMatricula.trim();
-    if (!/^\d{7}$/.test(matriculaLimpa)) {
-      Alert.alert('Matrícula Inválida', 'A matrícula deve conter exatamente 7 dígitos numéricos.');
-      return;
-    }
+  const usuario = auth.currentUser;
 
-    setNome(editNome);
-    setUsuarioEmail(editEmail);
-    setCurso(editCurso);
-    setMatricula(matriculaLimpa);
+  if (!usuario) {
+    Alert.alert('Erro', 'Você precisa estar autenticado.');
+    return;
+  }
+
+  try {
+    await updateDoc(doc(db, 'usuarios', usuario.uid), {
+      nome: editNome.trim(),
+      curso: editCurso.trim()
+    });
+
+    setNome(editNome.trim());
+    setCurso(editCurso.trim());
     setModalVisivel(false);
 
-    Alert.alert('Sucesso', 'Dados do perfil atualizados com sucesso!');
-  };
+    Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
+  } catch (erro) {
+    console.error('Erro ao salvar perfil:', erro);
+    Alert.alert('Erro', 'Não foi possível salvar as alterações.');
+  }
+};
 
-  const deslogar = () => {
-    if (auth.currentUser?.isAnonymous) {
-      Alert.alert('Conta de visitante', 'O login com conta ainda não está integrado. Vamos manter sua sessão de visitante para preservar o acesso às suas ocorrências.');
-      return;
-    }
-    signOut(auth)
-      .then(() => {
-        Alert.alert('Sessão Encerrada', 'Você saiu da sua conta.');
-      })
-      .catch(() => {
-        Alert.alert('Erro', 'Não foi possível sair da conta.');
-      });
-  };
+  const deslogar = async () => {
+  try {
+    await signOut(auth);
+    router.dismissAll();
+    router.replace('/login');
+  } catch (erro) {
+    console.error('Erro ao encerrar sessão:', erro);
+    Alert.alert('Erro', 'Não foi possível sair da conta.');
+  }
+};
 
   const temaAtual = modoEscuro ? estilosEscuros : estilosClaros;
 
