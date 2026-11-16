@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ActivityIndicator, Image as RNImage } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import estilo from './styles';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import estilo from "@/styles/styles";
 
-export default function Login({ navigation }) {
-  const [matricula, setMatricula] = useState('');
-  const [senha, setSenha] = useState('');
+export default function Login() {
+  const [matricula, setMatricula] = useState("");
+  const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
     if (!matricula.trim() || !senha.trim()) {
-      Alert.alert('Atenção', 'Por favor, preencha a matrícula e a senha.');
+      Alert.alert("Atenção", "Por favor, preencha a matrícula e a senha.");
       return;
     }
 
@@ -19,24 +32,21 @@ export default function Login({ navigation }) {
 
     setTimeout(() => {
       setLoading(false);
-      Alert.alert('Sucesso', `Bem-vindo! Matrícula: ${matricula}`);
+      Alert.alert("Sucesso", `Bem-vindo! Matrícula: ${matricula}`);
     }, 1000);
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={estilo.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <KeyboardAvoidingView
+      style={estilo.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={estilo.scrollContainer} keyboardShouldPersistTaps="handled">
-          
-          {/* Logo Brasão UNIFOR vindo direto do assets */}
+        <ScrollView
+          contentContainerStyle={estilo.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+        >
           <View style={estilo.headerContainer}>
-            <RNImage 
-              source={require('./assets/Brasao_unifor.png')} 
-              style={estilo.logo} 
-            />
             <Text style={estilo.tituloLogo}>Help Campus</Text>
           </View>
 
@@ -61,24 +71,30 @@ export default function Login({ navigation }) {
                 onChangeText={setSenha}
                 secureTextEntry={!mostrarSenha}
               />
-              <TouchableOpacity 
-                style={estilo.eyeIcon} 
+              <TouchableOpacity
+                style={estilo.eyeIcon}
                 onPress={() => setMostrarSenha(!mostrarSenha)}
               >
-                <MaterialCommunityIcons 
-                  name={mostrarSenha ? "eye-outline" : "eye-off-outline"} 
-                  size={22} 
-                  color="#000000" 
+                <MaterialCommunityIcons
+                  name={mostrarSenha ? "eye-outline" : "eye-off-outline"}
+                  size={22}
+                  color="#000000"
                 />
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={() => Alert.alert('Recuperação', 'Função de redefinição de senha.')}>
-              <Text style={estilo.esqueceuSenhaText}>Esqueceu sua senha ?</Text>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert("Recuperação", "Função de redefinição de senha.")
+              }
+            >
+              <Text style={estilo.esqueceuSenhaText}>
+                Esqueceu sua senha ?
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={estilo.botaoAcessar} 
+            <TouchableOpacity
+              style={estilo.botaoAcessar}
               onPress={handleLogin}
               disabled={loading}
               activeOpacity={0.8}
@@ -92,14 +108,13 @@ export default function Login({ navigation }) {
 
             <Text style={estilo.divisorTexto}>ou</Text>
 
-            <TouchableOpacity 
-              style={estilo.linkCadastrar} 
-              onPress={() => navigation.navigate('cadastro')}
+            <TouchableOpacity
+              style={estilo.linkCadastrar}
+              onPress={() => router.push("/cadastro")}
             >
               <Text style={estilo.textoCadastrar}>Cadastrar</Text>
             </TouchableOpacity>
           </View>
-
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

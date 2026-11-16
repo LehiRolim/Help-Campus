@@ -1,6 +1,9 @@
 import React, { createContext, useState, useContext } from 'react';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({
+  modoEscuro: false,
+  alternarModoEscuro: (valor) => {}
+});
 
 export function ThemeProvider({ children }) {
   const [modoEscuro, setModoEscuro] = useState(false);

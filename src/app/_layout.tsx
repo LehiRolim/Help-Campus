@@ -10,6 +10,8 @@ function RootLayoutNav() {
       <StatusBar style={modoEscuro ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="cadastro" />
         <Stack.Screen name="perfil" />
         <Stack.Screen name="redefinir-senha" />
         <Stack.Screen name="termos" options={{ presentation: 'modal' }} />

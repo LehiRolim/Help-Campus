@@ -11,12 +11,12 @@ import {
   Keyboard,
   Platform,
   ActivityIndicator,
-  Image as RNImage,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import estilo from "./styles";
+import { router } from "expo-router";
+import estilo from "@/styles/styles";
 
-export default function Cadastro({ navigation }) {
+export default function Cadastro() {
   const [tipoUsuario, setTipoUsuario] = useState("aluno");
   const [nome, setNome] = useState("");
   const [matricula, setMatricula] = useState("");
@@ -28,6 +28,7 @@ export default function Cadastro({ navigation }) {
   const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  /** @type {const} */
   const opcoesPerfil = [
     { label: "Aluno", value: "aluno", icon: "school-outline" },
     { label: "Professor", value: "professor", icon: "human-male-board" },
@@ -60,7 +61,7 @@ export default function Cadastro({ navigation }) {
     setTimeout(() => {
       setLoading(false);
       Alert.alert("Sucesso", `Conta de ${tipoUsuario} criada com sucesso!`, [
-        { text: "Ir para Login", onPress: () => navigation.navigate("login") },
+        { text: "Ir para Login", onPress: () => router.replace("/login") },
       ]);
     }, 1000);
   };
@@ -75,12 +76,7 @@ export default function Cadastro({ navigation }) {
           contentContainerStyle={estilo.scrollContainer}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Logo Brasão UNIFOR vindo direto do assets */}
           <View style={estilo.headerContainer}>
-            <RNImage
-              source={require("./assets/Brasao_unifor.png")}
-              style={estilo.logo}
-            />
             <Text style={estilo.tituloLogo}>Help Campus</Text>
             <Text style={estilo.subtitulo}>Criar conta</Text>
           </View>
@@ -207,7 +203,7 @@ export default function Cadastro({ navigation }) {
               <Text style={estilo.divisorTexto}>Já possui conta? </Text>
               <TouchableOpacity
                 style={estilo.linkCadastrar}
-                onPress={() => navigation.navigate("login")}
+                onPress={() => router.back()}
               >
                 <Text style={estilo.textoCadastrar}>Entrar</Text>
               </TouchableOpacity>
